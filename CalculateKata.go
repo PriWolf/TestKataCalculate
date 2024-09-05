@@ -57,7 +57,7 @@ func convertTypeNumber(num1, num2 string) (int, int, bool) {
 		num1Int = convertRomeToInt(num1)
 		num2Int = convertRomeToInt(num2)
 
-		//fmt.Println("Число1: ", num1Int, "Число2: ", num2Int) //проверка выводимых чисел
+		//fmt.Println("Число1: ", num1Int, "Число2: ", num2Int) //проверка выводимых
 
 		if checkNumValue(num1Int, num2Int) {
 			return num1Int, num2Int, false
@@ -101,8 +101,9 @@ func convertRomeToInt(num string) int {
 			lastNum = nowNum
 		}
 
-		//fmt.Println("Последнее число: ", lastNum, " | число сейчас: ", nowNum, "| сумма: ", sum) //проверка подсчетов
-	}.eturn sum
+		//fmt.Println("Последнее число: ", lastNum, " | число сейчас: ", nowNum, "| сумма: ", sum) // проверка числа
+	}
+	return sum
 }
 
 func checkNumValue(num1, num2 int) bool {
