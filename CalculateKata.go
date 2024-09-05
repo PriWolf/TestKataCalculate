@@ -9,7 +9,7 @@ import (
 func main() {
 
 	var num1, num2, symbol, end = getInput()
-	checkBaseInput(num1, num2, end)
+	checkBaseInput(num1, symbol, num2, end)
 
 	var num1Int, num2Int, types = convertTypeNumber(num1, num2)
 	//types = true - Arabian | false - Rome
@@ -35,7 +35,7 @@ func getInput() (string, string, string, string) {
 	return num1, num2, symbol, end
 }
 
-func checkBaseInput(num1, num2, end string) {
+func checkBaseInput(num1, symbol, num2, end string) {
 	//Проверка первичных введенных данных под условия
 	if num2 == "" || end != "" {
 		panic("неправильно введины данные")
@@ -47,14 +47,17 @@ func convertTypeNumber(num1, num2 string) (int, int, bool) {
 	var num1Int, num2Int int
 
 	var num1Rome, num2Rome bool
-	num1Rome, _ = regexp.MatchString("^[IVX]*$", num1)
-	num2Rome, _ = regexp.MatchString("^[IVX]*$", num2)
+	num1Rome, _ = regexp.MatchString("^(X|IX|IV|V?I{0,3})$", num1)
+	num2Rome, _ = regexp.MatchString("^(X|IX|IV|V?I{0,3})$", num2)
+
+	//fmt.Println(num1Rome, "1 Условия 2", num2Rome) //проверка условий
+
 	if num1Rome && num2Rome {
 		//Римская империя
 		num1Int = convertRomeToInt(num1)
 		num2Int = convertRomeToInt(num2)
 
-		//fmt.Println("Число1: ", num1Int, "Число2: ", num2Int)
+		//fmt.Println("Число1: ", num1Int, "Число2: ", num2Int) //проверка выводимых чисел
 
 		if checkNumValue(num1Int, num2Int) {
 			return num1Int, num2Int, false
@@ -73,7 +76,7 @@ func convertTypeNumber(num1, num2 string) (int, int, bool) {
 	panic("Введенные числа не подходят под критерии работы приложения")
 }
 
-func convertRomeToInt(num string) (int) {
+func convertRomeToInt(num string) int {
 	//Перевод из римских чисел в арабские
 	var sum, lastNum int = 0, 0
 	for i := 0; i < len(num); i++ {
@@ -92,18 +95,17 @@ func convertRomeToInt(num string) (int) {
 			sum += nowNum
 			break
 		}
-		
+
 		if lastNum < nowNum {
 			sum = sum - lastNum - lastNum
 			lastNum = nowNum
 		}
 
-		//fmt.Println("Последнее число: ", lastNum, " | число сейчас: ", nowNum, "| сумма: ", sum)
-	}
-	return sum
+		//fmt.Println("Последнее число: ", lastNum, " | число сейчас: ", nowNum, "| сумма: ", sum) //проверка подсчетов
+	}.eturn sum
 }
 
-func checkNumValue(num1, num2 int) (bool) {
+func checkNumValue(num1, num2 int) bool {
 	if num1 <= 10 && num2 <= 10 && num1 > 0 && num2 > 0 {
 		return true
 	}
@@ -111,7 +113,7 @@ func checkNumValue(num1, num2 int) (bool) {
 	return false
 }
 
-func arithmetic(num1, num2 int, symbol string) (int) {
+func arithmetic(num1, num2 int, symbol string) int {
 	//математические действия
 	switch symbol {
 	case "+":
@@ -134,7 +136,7 @@ func answer(sum int, types bool) {
 		answer = strconv.Itoa(sum)
 	} else {
 		//else Rome
-		
+
 		answer = convertRomeToString(sum)
 	}
 
@@ -143,7 +145,7 @@ func answer(sum int, types bool) {
 
 func convertRomeToString(sum int) string {
 	if sum <= 0 {
-		panic("Число ниже нуля")
+		panic("Число ниже или равно нулю")
 	}
 
 	var number string
